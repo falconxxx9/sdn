@@ -1,0 +1,110 @@
+AIM - To implement Multi Area OSPF (Open Shortest Path First) routing using Cisco Packet Tracer.
+1. TOPOLOGY
+Add these devices: - 3 Routers (1841) - 2 Laptops (Laptop-PT)
+Connections:
+1. Laptop0 → Router0
+2. Router0 → Router1
+3. Router1 → Router2
+4. Router2 → Laptop1
+
+Area distribution:
+- R0 and R1 connection: Area 0
+- R1 and R2 connection: Area 1
+- R1 acts as an ABR (Area Border Router) because it connects both areas.
+
+3. CONFIGURE LAPTOPS
+Laptop0 → Desktop → IP Configuration
+IP Address:      192.168.1.2
+Subnet Mask:     255.255.255.0
+Default Gateway: 192.168.1.1
+Laptop1 → Desktop → IP Configuration
+IP Address:      192.168.2.2
+Subnet Mask:     255.255.255.0
+Default Gateway: 192.168.2.1
+
+4. CONFIGURE ROUTER R0
+enable
+configure terminal
+interface fastethernet 0/0
+ip address 10.10.10.1 255.255.255.252
+no shutdown
+exit
+interface fastethernet 0/1
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+exit
+
+5. CONFIGURE ROUTER R1
+enable
+configure terminal
+interface fastethernet 0/0
+ip address 10.10.10.2 255.255.255.252
+no shutdown
+exit
+interface fastethernet 0/1
+ip address 10.101.10.1 255.255.255.252
+no shutdown
+exit
+
+6. CONFIGURE ROUTER R2
+enable
+configure terminal
+interface fastethernet 0/0
+ip address 10.101.10.2 255.255.255.252
+no shutdown
+exit
+interface fastethernet 0/1
+ip address 192.168.2.1 255.255.255.0
+no shutdown
+exit
+
+
+7. CONFIGURE OSPF PROTOCOL
+Configure Router R0
+enable
+configure terminal
+router ospf 24222
+network 10.10.10.0 0.0.0.3 area 0
+network 192.168.1.0 0.0.0.255 area 0
+end
+
+Configure Router R1
+enable
+configure terminal
+router ospf 24222
+network 10.10.10.0 0.0.0.3 area 0
+network 10.101.10.0 0.0.0.3 area 1
+end
+
+Configure Router R2
+enable
+configure terminal
+router ospf 24222
+network 10.101.10.2 0.0.0.3 area 1
+network 192.168.2.0 0.0.0.255 area 1
+end
+
+8. CHECK IP CONNECTIVITY
+Check routing table 
+show ip route ospf
+show ip ospf neighbor
+
+Check connectivity from Laptop0
+Open Desktop → Command Prompt.
+ping 192.168.2.2
+Check connectivity from Laptop1
+ping 192.168.1.2
+
+Expected result: Successful ping replies between both laptops.
+2. IP ADDRESSING TABLE
+Based on the topology and addressing in your practical journal:
+| Device  | Interface    | IP Address    | Subnet Mask       |
+|---------|--------------|---------------|-------------------|
+| R0      | Fa0/0        | 10.10.10.1    | 255.255.255.252   |
+| R0      | Fa0/1        | 192.168.1.1   | 255.255.255.0     |
+| R1      | Fa0/0        | 10.10.10.2    | 255.255.255.252   |
+| R1      | Fa0/1        | 10.101.10.1   | 255.255.255.252   |
+| R2      | Fa0/0        | 10.101.10.2   | 255.255.255.252   |
+| R2      | Fa0/1        | 192.168.2.1   | 255.255.255.0     |
+| Laptop0 | FastEthernet | 192.168.1.2   | 255.255.255.0     |
+| Laptop1 | FastEthernet | 192.168.2.2   | 255.255.255.0     |
