@@ -1,3 +1,7 @@
+TOPOLOGY - Add these devices:
+- 2 Routers (Router-PT)
+- 2 PCs
+
 Configure PC0
 Click PC0 → Desktop → IP Configuration.
 Enter:
