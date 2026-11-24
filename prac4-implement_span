@@ -1,0 +1,37 @@
+Practical 4 – Implement SPAN
+Topology: Devices used: - 1 Switch (2960-24TT)- 1 PC - connected to Switch- 1 Server - connected to Switch - 1 Sniffer - connected to Switch
+
+4. IP Configuration
+Device	 IP Address	 Subnet Mask
+PC0	   | 10.1.1.100 |	255.255.255.0
+Server0| 10.1.1.200	| 255.255.255.0
+
+5. Switch Configuration
+Open the switch CLI and enter:
+enable
+configure terminal
+monitor session 1 source interface fa0/1
+monitor session 1 destination interface fa0/3
+end
+
+
+6. Configure the Sniffer
+1. Click Sniffer0.
+2. Open the GUI tab.
+3. Set Service → On.
+4. Under Incoming Packets, select Port0 (the journal screenshot shows Port0).
+5. Click Clear to clear the existing filters.
+6. Select only ICMP from the filter list.
+
+
+7. Verification
+On PC0:
+1. Open Desktop → Command Prompt.
+2. Ping the server:
+ping 10.1.1.200
+
+
+3. Open Sniffer0 GUI and check the captured packets. You should see ICMP traffic.
+
+On the switch, you can also verify SPAN:
+show monitor
