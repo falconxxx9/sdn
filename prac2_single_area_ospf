@@ -1,0 +1,132 @@
+AIM - To implement Single Area OSPF (Open Shortest Path First) routing protocol using Cisco Packet Tracer.
+1. TOPOLOGY
+Add these devices:
+- 4 Routers (1841)
+- 1 Switch (2960)
+Connections:
+1. R0 → Switch
+2. R1 → Switch
+3. R2 → Switch
+4. R2 → R3 (Serial connection)
+
+3. CONFIGURE ROUTER R0
+enable
+configure terminal
+interface loopback 0
+ip address 10.10.20.1 255.255.255.0
+no shutdown
+exit
+interface fastethernet 0/0
+ip address 192.168.0.2 255.255.255.0
+no shutdown
+exit
+end
+write memory
+
+4. CONFIGURE ROUTER R1
+enable
+configure terminal
+interface loopback 0
+ip address 10.10.10.1 255.255.255.0
+no shutdown
+exit
+interface fastethernet 0/0
+ip address 192.168.0.1 255.255.255.0
+no shutdown
+exit
+end
+write memory
+
+5. CONFIGURE ROUTER R2
+enable
+configure terminal
+interface loopback 0
+ip address 10.10.30.1 255.255.255.0
+no shutdown
+exit
+interface serial 0/1/0
+ip address 172.16.0.1 255.255.255.252
+no shutdown
+exit
+interface fastethernet 0/0
+ip address 192.168.0.3 255.255.255.0
+no shutdown
+exit
+end
+write memory
+
+
+6. CONFIGURE ROUTER R3
+enable
+configure terminal
+interface loopback 0
+ip address 10.10.40.1 255.255.255.0
+no shutdown
+exit
+interface serial 0/1/0
+ip address 172.16.0.2 255.255.255.252
+no shutdown
+exit
+end
+write memory
+
+
+7. CONFIGURE OSPF PROTOCOL
+Now we configure OSPF on all four routers.
+Configure OSPF on R0
+enable
+configure terminal
+router ospf 1
+router-id 10.2.2.2
+network 10.10.20.0 0.0.0.255 area 0
+network 192.168.0.0 0.0.0.255 area 0
+end
+write memory
+
+Configure OSPF on R1
+enable
+configure terminal
+router ospf 1
+router-id 10.1.1.1
+network 10.10.10.0 0.0.0.255 area 0
+network 192.168.0.0 0.0.0.255 area 0
+end
+write memory
+
+
+Configure OSPF on R2
+enable
+configure terminal
+router ospf 1
+router-id 10.3.3.3
+network 10.10.30.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.0.3 area 0
+network 192.168.0.0 0.0.0.255 area 0
+end
+write memory
+
+
+Configure OSPF on R3
+enable
+configure terminal
+router ospf 1
+router-id 10.4.4.4
+network 10.10.40.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.0.3 area 0
+end
+write memory
+
+8. CHECK CONNECTIVITY
+Run these commands on the routers.
+Check routing table:
+show ip route
+Check OSPF neighbors:
+show ip ospf neighbor
+Check connectivity from R0:
+ping 10.10.10.1
+ping 10.10.30.1
+ping 10.10.40.1
+Check connectivity from R3:
+ping 10.10.30.1
+ping 10.10.20.1
+ping 10.10.10.1
