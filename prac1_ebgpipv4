@@ -9,34 +9,13 @@ IP Address:      198.123.3.2
 Subnet Mask:     255.255.255.0
 Default Gateway: 198.123.3.1
 
-
-4. Configure Router R0
-Enter these commands:
-enable
-configure terminal
-hostname R0
-interface fastethernet0/1
-ip address 198.123.1.1 255.255.255.0
-no shutdown
-exit
-interface serial2/0
-ip address 198.123.2.1 255.255.255.0
-no shutdown
-exit
-
-
-5. Configure Router R1
-enable
-configure terminal
-hostname R1
-interface fastethernet0/1
-ip address 198.123.3.1 255.255.255.0
-no shutdown
-exit
-interface serial2/0
-ip address 198.123.2.2 255.255.255.0
-no shutdown
-exit
+Device	 Interface	           IP address	   Subnet mask
+PC0 	  FastEthernet	        198.123.1.2 |	255.255.255.0
+R0		     Fa0/1             198.123.1.1	| 255.255.255.0
+R0	       Serial	          198.123.2.1	| 255.255.255.0
+R1		      Serial         198.123.2.2	| 255.255.255.0
+R1	         Fa0/1          198.123.3.1	| 255.255.255.0
+PC1	  	 FastEthernet       198.123.3.2 |	255.255.255.0
 
 
 Configure the router for BGP protocol.
