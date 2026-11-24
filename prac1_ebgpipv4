@@ -40,3 +40,6 @@ R1 (config) # router bgp 200
 
 
 PING BOTH PC TO VERIFY
+
+PC0-->PC1
+PC1-->PC0
