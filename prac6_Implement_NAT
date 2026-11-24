@@ -30,6 +30,7 @@ DIRECT CONFIGURE
 Default gateways:
 - PC0 and Server0: 10.10.10.1 - PC1: 20.20.20.1
 
+R0:
 Configure Static NAT:
 ip nat inside source static 10.10.10.2 50.50.50.2
 ip nat inside source static 10.10.10.3 50.50.50.3
@@ -43,7 +44,7 @@ Configure static route R0:
 ip route 60.0.0.0 255.0.0.0 192.162.10.2
 end
 
-
+R1
 Configure Static NAT:
 ip nat inside source static 20.20.20.2 60.60.60.2
 interface fa0/0
