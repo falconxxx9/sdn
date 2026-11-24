@@ -1,0 +1,70 @@
+Devices:- 3 Routers: R0, ISP (R1), R2 (1941)
+Connections:
+- R0 connects to ISP R1.
+- ISP R1 connects to R2.
+- A virtual GRE tunnel connects R0 directly to R2.
+ CONNECT THOURGH COPPER WIRE
+
+! On Router0:
+interface gig0/0
+ip address 1.1.1.1 255.0.0.0
+no shutdown
+interface lo 0
+ip address 10.1.1.1 255.255.255.0
+no shutdown
+exit
+
+! On Router1:
+interface gig0/0
+ip address 1.1.1.2 255.0.0.0
+no shutdown
+interface gig0/1
+ip address 2.2.2.1 255.0.0.0
+no shutdown
+interface lo 0
+ip address 20.1.1.1 255.255.255.0
+no shutdown
+exit
+hostname ISP
+
+! On Router2:
+interface gig0/1
+ ip address 2.2.2.2 255.0.0.0
+ no shutdown
+interface lo 0
+ ip address 30.1.1.1 255.255.255.0
+ no shutdown
+ exit
+
+
+ Add Static Routes Through ISP
+ ! On Router0:
+ip route 2.0.0.0 255.0.0.0 1.1.1.2
+! On Router2:
+ip route 1.0.0.0 255.0.0.0 2.2.2.1
+
+
+Configure GRE Tunnel 1 on Both Endpoints
+! On Router0:
+configure terminal
+interface tunnel 1
+ tunnel source gig0/0
+ tunnel destination 2.2.2.2
+ ip address 192.168.13.1 255.255.255.0
+ no shutdown
+ end
+
+! On Router2:
+configure terminal
+interface tunnel 1
+ tunnel source gig0/1
+ tunnel destination 1.1.1.1
+ ip address 192.168.13.3 255.255.255.0
+ no shutdown
+ end
+
+Test Connectivity Across the GRE Tunnel
+ ! On Router0:
+ping 192.168.13.3
+! On Router2:
+ping 192.168.13.1
