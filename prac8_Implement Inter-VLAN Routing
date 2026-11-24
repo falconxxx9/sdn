@@ -1,0 +1,70 @@
+
+Topology & Addressing Summary
+(Router0 2911, Switch0 2960-24TT, and four PCs across VLAN 10 and VLAN 20).
+
+1. Configure PC IP Addresses and GatewaysOpen each PC and set subnet mask 255.255.255.0 
+along with its VLAN gateway:
+PC0: IP 192.168.10.2, Default Gateway 192.168.10.1
+PC2: IP 192.168.10.3, Default Gateway 192.168.10.1
+PC1: IP 192.168.20.2, Default Gateway 192.168.20.1
+PC3: IP 192.168.20.3, Default Gateway 192.168.20.1
+
+
+CONFIG SWITCH:
+enable
+configure terminal
+vlan 10
+ name VLAN10
+ exit
+vlan 20
+ name VLAN20
+ exit
+interface range fa0/0 
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+interface range fa0/2
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+interface range fa0/3
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+interface range fa0/4
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+interface fa0/24
+ switchport mode trunk
+ no shutdown
+ end
+
+
+ROUTER CONFIG:
+enable
+configure terminal
+interface gig0/0
+ no shutdown
+ exit
+interface gig0/0.10
+ encapsulation dot1q 10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+ exit
+interface gig0/0.20
+ encapsulation dot1q 20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+ end
+
+
+
+TO VERIFY
+ping 192.168.10.1
+ping 192.168.20.1
+ping 192.168.20.2
