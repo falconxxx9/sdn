@@ -1,0 +1,68 @@
+AIM: To implement Network Address Translation (NAT) to translate private IP addresses into public IP addresses.
+Example:
+Private IP	Public IP
+10.10.10.2	50.50.50.2
+10.10.10.3	50.50.50.3
+20.20.20.2	60.60.60.2
+
+3. Topology
+Devices: - 2 Routers PT: R0 and R1- 2 Switches PT- 2 PCs: PC0 and PC1 - 1 Server: Server0
+Connections:
+- PC0 and Server0 connect to Switch0.
+- Switch0 connects to R0.
+- R0 connects to R1 using Serial2/0.
+- R1 connects to Switch1.
+- Switch1 connects to PC1.
+Use automatic connection in Packet Tracer, as specified in your journal.
+
+4. IP Configuration
+DIRECT CONFIGURE
+| Device  | Interface    | IP Address    | Subnet Mask       |
+|---------|--------------|---------------|-------------------|
+| R0      | Fa0/0        | 10.10.10.1    | 255.255.255.0     |
+| R0      | Serial2/0    | 192.162.10.1  | 255.255.255.0     |
+| R1      | Fa0/0        | 20.20.20.1    | 255.255.255.0     |
+| R1      | Serial2/0    | 192.162.10.2  | 255.255.255.0     |
+| PC0     | FastEthernet | 10.10.10.2    | 255.255.255.0     |
+| Server0 | FastEthernet | 10.10.10.3    | 255.255.255.0     |
+| PC1     | FastEthernet | 20.20.20.2    | 255.255.255.0     |
+
+Default gateways:
+- PC0 and Server0: 10.10.10.1 - PC1: 20.20.20.1
+
+Configure Static NAT:
+ip nat inside source static 10.10.10.2 50.50.50.2
+ip nat inside source static 10.10.10.3 50.50.50.3
+interface fa0/0
+ip nat inside
+exit
+interface serial2/0
+ip nat outside
+exit
+Configure static route R0:
+ip route 60.0.0.0 255.0.0.0 192.162.10.2
+end
+
+
+Configure Static NAT:
+ip nat inside source static 20.20.20.2 60.60.60.2
+interface fa0/0
+ip nat inside
+exit
+interface serial2/0
+ip nat outside
+exit
+Configure static route R1:
+ip route 50.0.0.0 255.0.0.0 192.162.10.1
+end
+
+
+6. Verification - On both routers, check the routing table:
+show ip route
+Check NAT translations:
+show ip nat translations
+
+From PC0, test the public IP of PC1:
+ping 60.60.60.2
+From PC1, test the public IP of PC0:
+ping 50.50.50.2
