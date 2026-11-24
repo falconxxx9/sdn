@@ -1,0 +1,55 @@
+Practical 5 – Implement Standard IPv4 ACLs
+1. AIM - To implement Standard IPv4 Access Control Lists (ACLs) to permit or deny network traffic based on the source IP address
+Topology
+Devices:- 2 routers(1841): R0 and R1 - 2 switches(2950-24) - 3 PCs: PC0, PC1, PC2
+Connections:- PC0 → Switch0 → R0 - R0 → R1 - R1 → Switch1 → PC1 and PC2
+PC default gateways: - PC0: 192.168.1.1 - PC1: 192.168.2.1 - PC2: 192.168.2.1
+
+| Device | Interface | IP Address | Subnet Mask |
+|--------|-----------|------------|-------------|
+| R0     | Fa0/0     | 192.168.3.1 | 255.255.255.0 |
+| R0     | Fa0/1     | 192.168.1.1 | 255.255.255.0 |
+| R1     | Fa0/0     | 192.168.3.2 | 255.255.255.0 |
+| R1     | Fa0/1     | 192.168.2.1 | 255.255.255.0 |
+| PC0    | FastEthernet | 192.168.1.100 | 255.255.255.0 |
+| PC1    | FastEthernet | 192.168.2.100 | 255.255.255.0 |
+| PC2    | FastEthernet | 192.168.2.101 | 255.255.255.0 |
+
+Configure R0
+enable
+configure terminal
+hostname R0
+interface fa0/0
+ip address 192.168.3.1 255.255.255.0
+no shutdown
+exit
+interface fa0/1
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+exit
+ip route 192.168.2.0 255.255.255.0 192.168.3.2
+end
+
+Configure R1
+enable
+configure terminal
+hostname R1
+interface fa0/0
+ip address 192.168.3.2 255.255.255.0
+no shutdown
+exit
+interface fa0/1
+ip address 192.168.2.1 255.255.255.0
+no shutdown
+exit
+ip route 192.168.1.0 255.255.255.0 192.168.3.1
+end
+
+6. Configure the Standard ACL on R0
+enable
+configure terminal
+access-list 1 deny 192.168.2.101 0.0.0.0
+access-list 1 permit any
+interface fa0/1
+ip access-group 1 out
+end
