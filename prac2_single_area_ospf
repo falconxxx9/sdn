@@ -7,7 +7,7 @@ Connections:
 1. R0 → Switch
 2. R1 → Switch
 3. R2 → Switch
-4. R2 → R3 (Serial connection)
+4. R2 → R3 (Serial connection-SERIAL DCE)
 
 3. CONFIGURE ROUTER R0
 enable
